@@ -1,19 +1,22 @@
 
 import React, { PureComponent } from 'react';
 // import withRouter from 'umi/withRouter';
-// import { connect } from 'dva';
+import Hello from '../components/Hello';
+import styles from './index.less';
 import SiderBar from '../components/SiderBar'
 
 class BasicLayout extends PureComponent{
-  // componentDidMount(){
-  //   const { location, route } = this.props;
-  // }
   
   render(){
-    const { route, location } = this.props;
+    const { route, location, children } = this.props;
     const path = location.pathname;
-    return <div>
+    return <div className={styles.container}>
         <SiderBar routes={route.routes} path={path}/>
+        <div className={styles.caseContainer}>
+          {
+            path === "/"?<Hello></Hello>:children
+          }
+        </div>
     </div>
   }
 

@@ -7,13 +7,14 @@ export default {
     ['umi-plugin-react', {
       antd: true,
       dva: true,
-      dynamicImport: false,
+      // dynamicImport: true,
       title: 'upload',
       dll: false,
-      
       routes: {
         exclude: [
           /components\//,
+          /services\//,
+          /models\//
         ],
       },
     }],

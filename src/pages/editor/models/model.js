@@ -1,5 +1,5 @@
 export default {
-    namespace: 'manualUpload',
+    namespace: 'editor',
     state: {
         
     },
