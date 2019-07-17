@@ -8,9 +8,6 @@ import { Button, Modal, Icon, Upload } from 'antd';
     manualUpload: state.manualUpload,
 }))
 class ManualUpload extends PureComponent{
-    componentDidMount(){
-    //   const { location } = this.props;
-    }
     handleShowUploadModal=()=>{
       const { dispatch } = this.props;
       dispatch({
@@ -84,23 +81,12 @@ class ManualUpload extends PureComponent{
             })
         },
         beforeUpload:(file)=>{
-            // let count = [];
             let fileList = [];
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = e => {
                 file.thumbUrl = e.target.result;
                 files.push(file)
-                // files.map((item,index)=>{
-                //     if(file.name === item.name) {
-                //         count.push(index);
-                //         if(count.length>1) {
-                //             message.error("文件已存在!");
-                //             files.splice(index, 1); 
-                //             return;
-                //         }
-                //     }
-                // })
                 dispatch({
                     type:'manualUpload/updatePageReducer',
                     payload:{
