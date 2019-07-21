@@ -2,7 +2,7 @@ import {
     reqUpload
   } from '../services';
 export default {
-    namespace: 'manualUpload',
+    namespace: 'uploadCase',
     state: {
         showModal:false,
         fileList:[],
