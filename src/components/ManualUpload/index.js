@@ -5,7 +5,7 @@ class ManualUpload extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            fileList: [],
+            fileList: props.fileList||[],
             files: [],
             previewModal: false,
             previewUrl: ''
@@ -21,7 +21,6 @@ class ManualUpload extends PureComponent {
         this.setState({
             previewModal: false,
         })
-        this.props.onChange(this.state.fileList)
     }
     render() {
         const {
@@ -40,7 +39,7 @@ class ManualUpload extends PureComponent {
                 const index = this.state.fileList.indexOf(file);
                 const newFileList = this.state.fileList.slice();
                 newFileList.splice(index, 1);
-                this.props.onChange(newFileList)
+                this.props.onChange&&this.props.onChange(newFileList)
                 this.setState({
                     fileList: newFileList,
                     files: newFileList,
@@ -70,7 +69,7 @@ class ManualUpload extends PureComponent {
                     this.setState({
                         fileList: [...files]
                     })
-                    this.props.onChange(this.state.fileList)
+                    this.props.onChange&&this.props.onChange(this.state.fileList)
                 };
                 return false;
             },
