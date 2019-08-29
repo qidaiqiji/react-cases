@@ -3,128 +3,73 @@
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Button, Modal, Icon, Upload } from 'antd';
+import { Button, Modal } from 'antd';
+import ManualUpload from '@/components/ManualUpload';
 @connect(state => ({
-    manualUpload: state.manualUpload,
+    uploadCase: state.uploadCase,
 }))
-class ManualUpload extends PureComponent{
-    handleShowUploadModal=()=>{
-      const { dispatch } = this.props;
-      dispatch({
-        type:'manualUpload/updatePageReducer',
+class UploadCase extends PureComponent{
+  handleShowUploadModal=()=>{
+    this.props.dispatch({
+      type:'uploadCase/updatePageReducer',
+      payload:{
+        showModal:true,
+      }
+    })
+  }
+  handleCloseModal=()=>{
+    this.props.dispatch({
+      type:'uploadCase/updatePageReducer',
+      payload:{
+        showModal:false,
+      }
+    })
+  }
+  handleChangeFile=(files)=>{
+    this.props.dispatch({
+      type:'uploadCase/updatePageReducer',
+      payload:{
+        fileList:files,
+      }
+    })
+  }
+  handleConfirmUpload=()=>{
+    const { dispatch, uploadCase } = this.props;
+    const { fileList } = uploadCase;
+    const formData = new FormData();
+    fileList.forEach((file) => {
+        formData.append('files[]', file);
+    });
+    dispatch({
+        type:'uploadCase/confirmUpload',
         payload:{
-          showModal:true,
+            formData,
         }
-      })
-    }
-    handlePreview=(file)=>{
-      const { dispatch } = this.props;
-      dispatch({
-          type:'manualUpload/updatePageReducer',
-          payload:{
-              previewModal:true,
-              previewUrl:file.thumbUrl
-          }
-      })
-    }
-    handleCloseModal=type=>()=>{
-      const { dispatch } = this.props;
-      dispatch({
-          type:'manualUpload/updatePageReducer',
-          payload:{
-              [type]:false,
-          }
-      })
-    }
-    handleConfirmUpload=()=>{
-      const { dispatch, manualUpload } = this.props;
-      const { fileList } = manualUpload;
-      const formData = new FormData();
-      fileList.forEach((file) => {
-          formData.append('files[]', file);
-      });
-      dispatch({
-          type:'manualUpload/confirmUpload',
-          payload:{
-              formData,
-          }
-      })
-    }
+    })
+  }
     render(){
       const { 
-        dispatch,
-        manualUpload:{
+        uploadCase:{
           showModal,
-          fileList,
-          files,
-          previewModal,
-          previewUrl
         }
        } = this.props;
-      const uploadButton = (
-        <div>
-            <Icon type='plus' />
-            <div>上传图片</div>
-            </div>
-      );
-      const props = {
-        onRemove:(file)=>{
-            const index = fileList.indexOf(file);
-            const newFileList = fileList.slice();
-            newFileList.splice(index, 1);
-            dispatch({
-                type:'manualUpload/updatePageReducer',
-                payload:{
-                    fileList: newFileList,
-                    files: newFileList,
-                }
-            })
-        },
-        beforeUpload:(file)=>{
-            let fileList = [];
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = e => {
-                file.thumbUrl = e.target.result;
-                files.push(file)
-                dispatch({
-                    type:'manualUpload/updatePageReducer',
-                    payload:{
-                        fileList: [...fileList,...files],
-                    }
-                })
-            };
-            return false;
-        },
-        onPreview:this.handlePreview,
-        fileList:fileList,
-        listType:"picture-card",
-        multiple:true,
-      }
+      
       return <div>
             <Button type="primary" onClick={this.handleShowUploadModal}>点击上传</Button>
             <Modal
             visible={showModal}
             title="上传图片"
-            onCancel={this.handleCloseModal('showModal')}
+            onCancel={this.handleCloseModal}
             onOk={this.handleConfirmUpload}
             >
-              <Upload
-              { ...props }
-              >
-                  {uploadButton}
-              </Upload>
-            </Modal>
-            <Modal
-            visible={previewModal}
-            footer={null}
-            onCancel={this.handleCloseModal('previewModal')}
-            >
-                <img style={{ width: '100%' }} src={previewUrl} alt="图片"/>
+              <ManualUpload
+              onChange={this.handleChangeFile}
+              />
+             
             </Modal>
       </div>
     }
   
   }
   
-  export default ManualUpload;
+  export default UploadCase;

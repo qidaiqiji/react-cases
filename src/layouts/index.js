@@ -9,6 +9,7 @@ class BasicLayout extends PureComponent{
   
   render(){
     const { route, location, children } = this.props;
+    console.log("route",route)
     const path = location.pathname;
     return <div className={styles.container}>
         <SiderBar routes={route.routes} path={path}/>
