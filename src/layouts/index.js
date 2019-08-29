@@ -6,7 +6,9 @@ import styles from './index.less';
 import SiderBar from '../components/SiderBar'
 
 class BasicLayout extends PureComponent{
-  
+  componentDidMount(){
+    localStorage.setItem("username",'sally')
+  }
   render(){
     const { route, location, children } = this.props;
     console.log("route",route)

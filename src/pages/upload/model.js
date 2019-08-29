@@ -1,6 +1,6 @@
 import {
     reqUpload
-  } from '../services';
+  } from './services';
 export default {
     namespace: 'uploadCase',
     state: {
